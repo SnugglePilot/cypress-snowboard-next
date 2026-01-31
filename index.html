@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>When can I snowboard next? (Cypress)</title>
+  <meta name="description" content="A tiny dashboard that estimates the next good snowboarding day for Cypress Mountain (Vancouver)." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <h1>When can I snowboard next?</h1>
+      <p class="sub">Cypress Mountain (best-effort guess from lift status + snow totals + forecast)</p>
+    </header>
+
+    <section class="card" id="status">
+      <div class="row">
+        <h2 id="nextDay">Loading…</h2>
+        <div class="pill" id="confidence">—</div>
+      </div>
+      <p class="muted" id="updated">—</p>
+      <ul id="reasons" class="reasons"></ul>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>Right now (from Cypress report)</h3>
+        <div class="kv">
+          <div><span class="k">Lifts</span><span class="v" id="lifts">—</span></div>
+          <div><span class="k">Snow 7 days</span><span class="v" id="snow7">—</span></div>
+          <div><span class="k">Base depth</span><span class="v" id="base">—</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Sources</h3>
+        <ul class="links" id="sources"></ul>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>
+        This is a heuristic. Always sanity-check before driving up.
+        If this says “next season,” it’s using rough historical seasonality.
+      </p>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
