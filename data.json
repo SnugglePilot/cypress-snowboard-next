@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-01-31T17:41:29.678Z",
-  "generatedAtLocal": "2026-01-31, 09:41:29",
+  "generatedAt": "2026-01-31T17:45:19.331Z",
+  "generatedAtLocal": "2026-01-31, 09:45:19",
   "current": {
     "lifts": {
       "open": 5,
@@ -16,13 +16,81 @@
       "baseDepthCm": 145
     }
   },
+  "forecast": {
+    "days": [
+      {
+        "date": "2026-01-31",
+        "label": "2026-01-31 (today)",
+        "rainMm": 5.7,
+        "snowfallCm": 0,
+        "rainBefore3pm": true
+      },
+      {
+        "date": "2026-02-01",
+        "label": "Sun, Feb 1",
+        "rainMm": 30.5,
+        "snowfallCm": 0.6,
+        "rainBefore3pm": true
+      },
+      {
+        "date": "2026-02-02",
+        "label": "Mon, Feb 2",
+        "rainMm": 12.2,
+        "snowfallCm": 0.7,
+        "rainBefore3pm": true
+      },
+      {
+        "date": "2026-02-03",
+        "label": "Tue, Feb 3",
+        "rainMm": 4.7,
+        "snowfallCm": 0,
+        "rainBefore3pm": false
+      },
+      {
+        "date": "2026-02-04",
+        "label": "Wed, Feb 4",
+        "rainMm": 1.3,
+        "snowfallCm": 0,
+        "rainBefore3pm": true
+      },
+      {
+        "date": "2026-02-05",
+        "label": "Thu, Feb 5",
+        "rainMm": 0,
+        "snowfallCm": 0,
+        "rainBefore3pm": false
+      },
+      {
+        "date": "2026-02-06",
+        "label": "Fri, Feb 6",
+        "rainMm": 0,
+        "snowfallCm": 0,
+        "rainBefore3pm": false
+      }
+    ],
+    "excludeBefore3pmRain": {
+      "2026-01-31": true,
+      "2026-02-01": true,
+      "2026-02-02": true,
+      "2026-02-03": false,
+      "2026-02-04": true,
+      "2026-02-05": false,
+      "2026-02-06": false
+    },
+    "raw": {
+      "url": "https://api.open-meteo.com/v1/forecast?latitude=49.3889782663548&longitude=-123.20711795277704&timezone=America%2FVancouver&forecast_days=7&hourly=rain%2Csnowfall%2Ctemperature_2m"
+    }
+  },
   "next": {
-    "label": "Next good day: ASAP (pick your next free morning/evening)",
-    "confidence": "good",
+    "label": "Next good day: Tue, Feb 3",
+    "confidence": "meh",
     "reasons": [
       "Cypress lift status: 5/6 open.",
       "Snow (7 days): 11 cm.",
-      "Base depth: 145 cm."
+      "Base depth: 145 cm.",
+      "Excluded today: forecast shows rain before 3pm.",
+      "No forecast rain before 3pm on 2026-02-03.",
+      "Forecast total rain: ~4.7 mm (but after 3pm, per rule)."
     ]
   },
   "sources": [
@@ -33,6 +101,10 @@
     {
       "label": "Snow-Forecast (Cypress mid)",
       "url": "https://www.snow-forecast.com/resorts/Cypress-Mountain/6day/mid"
+    },
+    {
+      "label": "Open-Meteo forecast (no key)",
+      "url": "https://open-meteo.com/"
     }
   ]
 }
