@@ -18,7 +18,9 @@ const SOURCES = {
   cypressReport: 'https://www.cypressmountain.com/mountain-report',
   snowForecast: 'https://www.snow-forecast.com/resorts/Cypress-Mountain/6day/mid',
   // No-key forecast API (Open-Meteo). Cypress Mountain weather station coords from their own page.
-  openMeteo: 'https://api.open-meteo.com/v1/forecast'
+  openMeteo: 'https://api.open-meteo.com/v1/forecast',
+  // BC River Forecast Centre: bi-weekly snow conditions commentary.
+  bcSnowCommentary: 'https://www2.gov.bc.ca/gov/content/environment/air-land-water/water/drought-flooding-dikes-dams/river-forecast-centre/snow-survey-water-supply-bulletin/snow-conditions-commentary'
 };
 
 const CYPRESS = {
@@ -38,6 +40,16 @@ function nowLocalString() {
 async function ab(...args) {
   const { stdout } = await execFileP('agent-browser', args, { maxBuffer: 1024 * 1024 * 10 });
   return stdout;
+}
+
+async function fetchText(url) {
+  const res = await fetch(url, { redirect: 'follow' });
+  if (!res.ok) throw new Error(`fetch ${url}: HTTP ${res.status}`);
+  const ct = res.headers.get('content-type') || '';
+  if (!ct.includes('text/') && !ct.includes('html') && !ct.includes('json')) {
+    throw new Error(`fetch ${url}: unexpected content-type ${ct}`);
+  }
+  return await res.text();
 }
 
 function parseLiftStatus(snapshotText) {
@@ -87,11 +99,32 @@ function parseSnow(snapshotText) {
   };
 }
 
-function seasonalGuess() {
+function seasonalGuess(bcSnowpack) {
   // Ultra-simple climatology for Cypress / Vancouver north shore.
   // (This is a heuristic, not a model.)
+  //
+  // Biasing (Andy): incorporate BC River Forecast Centre snow context.
+  // We treat Vancouver Island + provincial % median as a coarse proxy for coastal snow health.
+
   const d = new Date();
   const month = d.getMonth(); // 0=Jan
+
+  const prov = bcSnowpack?.provincialPctMedian ?? null;
+  const vanIsle = bcSnowpack?.vancouverIslandPctMedian ?? null;
+
+  const biasNotes = [];
+  let bias = 0; // -1 = later/weak season, +1 = earlier/strong season
+
+  if (typeof vanIsle === 'number') {
+    biasNotes.push(`BC ASWS Vancouver Island avg: ${vanIsle}% of median (${bcSnowpack?.updatedOn ?? 'unknown date'}).`);
+    if (vanIsle >= 110) bias += 1;
+    if (vanIsle <= 85) bias -= 1;
+  }
+  if (typeof prov === 'number') {
+    biasNotes.push(`BC ASWS provincial avg: ${prov}% of median (${bcSnowpack?.updatedOn ?? 'unknown date'}).`);
+    if (prov >= 115) bias += 1;
+    if (prov <= 95) bias -= 1;
+  }
 
   // Rough season windows:
   // - Nov/Dec: early season (hit or miss)
@@ -101,22 +134,36 @@ function seasonalGuess() {
   // - May-Oct: assume next season
 
   if (month >= 4 && month <= 9) {
+    const target = bias > 0
+      ? 'late Nov (maybe early)'
+      : bias < 0
+        ? 'mid/late Dec'
+        : 'late Nov / Dec';
+
     return {
-      label: 'Next season (aim for late Nov / Dec) — check again in fall',
+      label: `Next season (aim for ${target}) — check again in fall`,
       confidence: 'bad',
       reasons: [
         'Out of typical Cypress snow season (May–Oct).',
         'Historical pattern: first reliably rideable windows tend to show up late Nov–Dec.',
+        ...biasNotes,
       ],
     };
   }
 
   if (month === 10) {
+    const target = bias > 0
+      ? 'mid/late Nov'
+      : bias < 0
+        ? 'early/mid Dec'
+        : 'late Nov / early Dec';
+
     return {
-      label: 'Likely late Nov / early Dec (watch for first storms)',
+      label: `Likely ${target} (watch for first storms)`,
       confidence: 'meh',
       reasons: [
         'Early season: openings depend on first significant snow + sustained cold.',
+        ...biasNotes,
       ],
     };
   }
@@ -127,6 +174,7 @@ function seasonalGuess() {
       confidence: 'meh',
       reasons: [
         'Jan/Feb is historically the most reliable window for Cypress.',
+        ...biasNotes,
       ],
     };
   }
@@ -137,11 +185,12 @@ function seasonalGuess() {
     confidence: 'meh',
     reasons: [
       'Spring conditions are volatile; base can be fine but rain/warmth ruins it fast.',
+      ...biasNotes,
     ],
   };
 }
 
-function decideNext({ lifts, snow, forecast }) {
+function decideNext({ lifts, snow, forecast, bcSnowpack }) {
   // Heuristic rules:
   // - Hard constraint (Andy): if it rains at all before 3pm local time, exclude that day.
   // - If most lifts are open AND 7-day snow is decent, call it "go soon" (but only if today isn't excluded).
@@ -203,7 +252,7 @@ function decideNext({ lifts, snow, forecast }) {
     };
   }
 
-  const seasonal = seasonalGuess();
+  const seasonal = seasonalGuess(bcSnowpack);
   return {
     ...seasonal,
     reasons: [...reasons, ...seasonal.reasons, 'Also: no acceptable (no-rain-before-3pm) day found in the next 7 days.'],
@@ -272,6 +321,53 @@ async function fetchForecast() {
   return { days, excludeBefore3pmRain, raw: { url: u.toString() } };
 }
 
+async function fetchBCSnowpack() {
+  // Lightweight parse of the BC River Forecast Centre snow commentary page.
+  // We pull two numbers we can reliably extract from the text:
+  //  - provincial average % of median
+  //  - Vancouver Island basin average % of median (coastal proxy)
+  // Plus the page's "Last updated" date.
+
+  const html = await fetchText(SOURCES.bcSnowCommentary);
+  const text = html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const updatedOn = (() => {
+    const m = text.match(/Last updated on\s+([A-Za-z]+\s+\d{1,2},\s+\d{4})/i);
+    return m ? m[1] : null;
+  })();
+
+  const provincialPctMedian = (() => {
+    const m = text.match(/provincial average[^%]{0,120}is\s+(\d+)%\s+of\s+the\s+period-of-record\s+median/i);
+    return m ? Number(m[1]) : null;
+  })();
+
+  const vancouverIslandPctMedian = (() => {
+    const m = text.match(/Vancouver Island\s*\((\d+)%\)/i);
+    return m ? Number(m[1]) : null;
+  })();
+
+  // Short blurb for UI.
+  const blurb = (() => {
+    // Grab first paragraph after the date header if possible; otherwise fallback.
+    const m = text.match(/January\s+\d{1,2},\s+\d{4}\s+(.*?)(?:A complete listing of Automated Snow Weather Stations|The provincial average across all ASWS sites)/i);
+    const s = m ? m[1].trim() : null;
+    return s ? s.slice(0, 260) + (s.length > 260 ? '…' : '') : null;
+  })();
+
+  return {
+    sourceUrl: SOURCES.bcSnowCommentary,
+    updatedOn,
+    provincialPctMedian,
+    vancouverIslandPctMedian,
+    blurb,
+  };
+}
+
 async function main() {
   // Use a single browser session. agent-browser keeps state between commands.
   await ab('open', SOURCES.cypressReport);
@@ -290,7 +386,14 @@ async function main() {
     forecast = { error: String(e?.message ?? e) };
   }
 
-  const next = decideNext({ lifts, snow, forecast });
+  let bcSnowpack = null;
+  try {
+    bcSnowpack = await fetchBCSnowpack();
+  } catch (e) {
+    bcSnowpack = { error: String(e?.message ?? e), sourceUrl: SOURCES.bcSnowCommentary };
+  }
+
+  const next = decideNext({ lifts, snow, forecast, bcSnowpack });
 
   const out = {
     generatedAt: new Date().toISOString(),
@@ -300,11 +403,13 @@ async function main() {
       snow,
     },
     forecast,
+    bcSnowpack,
     next,
     sources: [
       { label: 'Cypress Mountain Report', url: SOURCES.cypressReport },
       { label: 'Snow-Forecast (Cypress mid)', url: SOURCES.snowForecast },
       { label: 'Open-Meteo forecast (no key)', url: 'https://open-meteo.com/' },
+      { label: 'BC Snow conditions commentary', url: SOURCES.bcSnowCommentary },
     ],
   };
 
