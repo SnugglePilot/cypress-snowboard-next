@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-01T12:40:11.771Z",
-  "generatedAtLocal": "2026-02-01, 04:40:11",
+  "generatedAt": "2026-02-01T23:28:45.899Z",
+  "generatedAtLocal": "2026-02-01, 15:28:45",
   "current": {
     "lifts": {
       "open": 4,
@@ -13,7 +13,7 @@
       "snow48HoursCm": 0,
       "snow7DaysCm": 11,
       "seasonTotalCm": 300,
-      "baseDepthCm": 145
+      "baseDepthCm": 120
     }
   },
   "forecast": {
@@ -21,64 +21,134 @@
       {
         "date": "2026-02-01",
         "label": "2026-02-01 (today)",
-        "rainMm": 18.7,
-        "snowfallCm": 0,
-        "rainBefore3pm": true
+        "rainMm": 15.2,
+        "snowfallCm": 0.9,
+        "rainBefore3pm": true,
+        "stoke": "bad"
       },
       {
         "date": "2026-02-02",
         "label": "Mon, Feb 2",
-        "rainMm": 16.1,
-        "snowfallCm": 4,
-        "rainBefore3pm": true
+        "rainMm": 27.6,
+        "snowfallCm": 8.8,
+        "rainBefore3pm": true,
+        "stoke": "bad"
       },
       {
         "date": "2026-02-03",
         "label": "Tue, Feb 3",
-        "rainMm": 0,
+        "rainMm": 0.1,
         "snowfallCm": 0,
-        "rainBefore3pm": false
+        "rainBefore3pm": true,
+        "stoke": "bad"
       },
       {
         "date": "2026-02-04",
         "label": "Wed, Feb 4",
         "rainMm": 0.1,
         "snowfallCm": 0,
-        "rainBefore3pm": true
+        "rainBefore3pm": true,
+        "stoke": "bad"
       },
       {
         "date": "2026-02-05",
         "label": "Thu, Feb 5",
         "rainMm": 0,
         "snowfallCm": 0,
-        "rainBefore3pm": false
+        "rainBefore3pm": false,
+        "stoke": "good"
       },
       {
         "date": "2026-02-06",
         "label": "Fri, Feb 6",
-        "rainMm": 0.9,
+        "rainMm": 0,
         "snowfallCm": 0,
-        "rainBefore3pm": true
+        "rainBefore3pm": false,
+        "stoke": "good"
       },
       {
         "date": "2026-02-07",
         "label": "Sat, Feb 7",
-        "rainMm": 20.7,
+        "rainMm": 0,
         "snowfallCm": 0,
-        "rainBefore3pm": true
+        "rainBefore3pm": false,
+        "stoke": "good"
+      },
+      {
+        "date": "2026-02-08",
+        "label": "Sun, Feb 8",
+        "rainMm": 0,
+        "snowfallCm": 0,
+        "rainBefore3pm": false,
+        "stoke": "good"
+      },
+      {
+        "date": "2026-02-09",
+        "label": "Mon, Feb 9",
+        "rainMm": 0.6,
+        "snowfallCm": 0,
+        "rainBefore3pm": true,
+        "stoke": "bad"
+      },
+      {
+        "date": "2026-02-10",
+        "label": "Tue, Feb 10",
+        "rainMm": 0,
+        "snowfallCm": 0,
+        "rainBefore3pm": false,
+        "stoke": "good"
+      },
+      {
+        "date": "2026-02-11",
+        "label": "Wed, Feb 11",
+        "rainMm": 0,
+        "snowfallCm": 0,
+        "rainBefore3pm": false,
+        "stoke": "good"
+      },
+      {
+        "date": "2026-02-12",
+        "label": "Thu, Feb 12",
+        "rainMm": 0,
+        "snowfallCm": 0,
+        "rainBefore3pm": false,
+        "stoke": "good"
+      },
+      {
+        "date": "2026-02-13",
+        "label": "Fri, Feb 13",
+        "rainMm": 1.5,
+        "snowfallCm": 0.2,
+        "rainBefore3pm": false,
+        "stoke": "good"
+      },
+      {
+        "date": "2026-02-14",
+        "label": "Sat, Feb 14",
+        "rainMm": 2.7,
+        "snowfallCm": 0.8,
+        "rainBefore3pm": true,
+        "stoke": "bad"
       }
     ],
     "excludeBefore3pmRain": {
       "2026-02-01": true,
       "2026-02-02": true,
-      "2026-02-03": false,
+      "2026-02-03": true,
       "2026-02-04": true,
       "2026-02-05": false,
-      "2026-02-06": true,
-      "2026-02-07": true
+      "2026-02-06": false,
+      "2026-02-07": false,
+      "2026-02-08": false,
+      "2026-02-09": true,
+      "2026-02-10": false,
+      "2026-02-11": false,
+      "2026-02-12": false,
+      "2026-02-13": false,
+      "2026-02-14": true
     },
     "raw": {
-      "url": "https://api.open-meteo.com/v1/forecast?latitude=49.3889782663548&longitude=-123.20711795277704&timezone=America%2FVancouver&forecast_days=7&hourly=rain%2Csnowfall%2Ctemperature_2m"
+      "url": "https://api.open-meteo.com/v1/forecast?latitude=49.3889782663548&longitude=-123.20711795277704&timezone=America%2FVancouver&forecast_days=14&hourly=rain%2Csnowfall%2Ctemperature_2m"
     }
   },
   "bcSnowpack": {
@@ -89,14 +159,14 @@
     "blurb": "A bi-weekly commentary of snow conditions based on readings from the B.C. Automated Snow Weather Station (ASWS) network is published during the snow season. January 15, 2026 Storm activity continued through the first half of January, supporting generally above…"
   },
   "next": {
-    "label": "Next good day: Tue, Feb 3",
+    "label": "Next good day: Thu, Feb 5",
     "confidence": "meh",
     "reasons": [
       "Cypress lift status: 4/6 open.",
       "Snow (7 days): 11 cm.",
-      "Base depth: 145 cm.",
+      "Base depth: 120 cm.",
       "Excluded today: forecast shows rain before 3pm.",
-      "No forecast rain before 3pm on 2026-02-03."
+      "No forecast rain before 3pm on 2026-02-05."
     ]
   },
   "sources": [

@@ -255,7 +255,7 @@ function decideNext({ lifts, snow, forecast, bcSnowpack }) {
   const seasonal = seasonalGuess(bcSnowpack);
   return {
     ...seasonal,
-    reasons: [...reasons, ...seasonal.reasons, 'Also: no acceptable (no-rain-before-3pm) day found in the next 7 days.'],
+    reasons: [...reasons, ...seasonal.reasons, 'Also: no acceptable (no-rain-before-3pm) day found in the next 14 days.'],
   };
 }
 
@@ -269,7 +269,7 @@ async function fetchForecast() {
   u.searchParams.set('latitude', String(CYPRESS.lat));
   u.searchParams.set('longitude', String(CYPRESS.lon));
   u.searchParams.set('timezone', CYPRESS.tz);
-  u.searchParams.set('forecast_days', '7');
+  u.searchParams.set('forecast_days', '14');
   u.searchParams.set('hourly', 'rain,snowfall,temperature_2m');
 
   const res = await fetch(u);
@@ -306,13 +306,29 @@ async function fetchForecast() {
   }
 
   const days = Array.from(byDate.values())
-    .slice(0, 7)
+    .slice(0, 14)
     .map((d, idx) => {
       const dateObj = new Date(d.date + 'T12:00:00');
       const label = idx === 0
         ? `${d.date} (today)`
         : dateObj.toLocaleDateString('en-CA', { timeZone: CYPRESS.tz, weekday: 'short', month: 'short', day: 'numeric' });
-      return { date: d.date, label, rainMm: Math.round(d.rainMm * 10) / 10, snowfallCm: Math.round(d.snowfallCm * 10) / 10, rainBefore3pm: d.rainBefore3pm };
+      const rainMm = Math.round(d.rainMm * 10) / 10;
+      const snowfallCm = Math.round(d.snowfallCm * 10) / 10;
+      const stoke = d.rainBefore3pm
+        ? 'bad'
+        : snowfallCm > 0 && rainMm < 5
+          ? 'good'
+          : rainMm < 2
+            ? 'good'
+            : 'meh';
+      return {
+        date: d.date,
+        label,
+        rainMm,
+        snowfallCm,
+        rainBefore3pm: d.rainBefore3pm,
+        stoke,
+      };
     });
 
   const excludeBefore3pmRain = {};

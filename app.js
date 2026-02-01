@@ -3,7 +3,9 @@ async function main(){
     nextDay: document.getElementById('nextDay'),
     confidence: document.getElementById('confidence'),
     updated: document.getElementById('updated'),
+    editorial: document.getElementById('editorial'),
     reasons: document.getElementById('reasons'),
+    stokeMeter: document.getElementById('stokeMeter'),
     lifts: document.getElementById('lifts'),
     snow7: document.getElementById('snow7'),
     base: document.getElementById('base'),
@@ -32,11 +34,48 @@ async function main(){
 
   els.updated.textContent = `Last updated: ${data.generatedAtLocal ?? data.generatedAt ?? 'unknown'}`;
 
+  if (data.editorial?.blurbHtml) {
+    els.editorial.innerHTML = data.editorial.blurbHtml;
+    els.editorial.style.display = 'block';
+  } else if (data.editorial?.blurb) {
+    els.editorial.textContent = data.editorial.blurb;
+    els.editorial.style.display = 'block';
+  } else {
+    els.editorial.style.display = 'none';
+  }
+
   els.reasons.innerHTML = '';
   (data.next?.reasons ?? []).forEach(r => {
     const li = document.createElement('li');
     li.textContent = r;
     els.reasons.appendChild(li);
+  });
+
+  // Stoke-o-meter: one card per day (up to 14)
+  els.stokeMeter.innerHTML = '';
+  const days = data.forecast?.days ?? [];
+  days.forEach((d) => {
+    const stoke = d.stoke ?? (d.rainBefore3pm ? 'bad' : (d.snowfallCm > 0 && (d.rainMm ?? 0) < 5) || (d.rainMm ?? 0) < 2 ? 'good' : 'meh');
+    const card = document.createElement('div');
+    card.className = 'stoke-day';
+    card.setAttribute('role', 'listitem');
+    const label = document.createElement('span');
+    label.className = 'stoke-day-label';
+    label.textContent = d.label ?? d.date;
+    const pill = document.createElement('span');
+    pill.className = 'pill stoke-pill ' + stoke;
+    pill.textContent = stoke;
+    card.appendChild(label);
+    card.appendChild(pill);
+    const detail = document.createElement('span');
+    detail.className = 'stoke-day-detail';
+    const parts = [];
+    if (d.rainBefore3pm) parts.push('rain AM');
+    if (d.snowfallCm != null && d.snowfallCm > 0) parts.push(d.snowfallCm + ' cm snow');
+    if (d.rainMm != null && d.rainMm > 0 && !d.rainBefore3pm) parts.push(d.rainMm + ' mm rain');
+    detail.textContent = parts.length ? parts.join(' · ') : 'dry';
+    card.appendChild(detail);
+    els.stokeMeter.appendChild(card);
   });
 
   if (data.current) {
