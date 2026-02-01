@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-02-01T05:38:58.777Z",
-  "generatedAtLocal": "2026-01-31, 21:38:58",
+  "generatedAt": "2026-02-01T12:40:11.771Z",
+  "generatedAtLocal": "2026-02-01, 04:40:11",
   "current": {
     "lifts": {
       "open": 4,
@@ -19,24 +19,17 @@
   "forecast": {
     "days": [
       {
-        "date": "2026-01-31",
-        "label": "2026-01-31 (today)",
-        "rainMm": 6.4,
-        "snowfallCm": 0,
-        "rainBefore3pm": true
-      },
-      {
         "date": "2026-02-01",
-        "label": "Sun, Feb 1",
-        "rainMm": 16.1,
-        "snowfallCm": 1.2,
+        "label": "2026-02-01 (today)",
+        "rainMm": 18.7,
+        "snowfallCm": 0,
         "rainBefore3pm": true
       },
       {
         "date": "2026-02-02",
         "label": "Mon, Feb 2",
-        "rainMm": 18.4,
-        "snowfallCm": 6.7,
+        "rainMm": 16.1,
+        "snowfallCm": 4,
         "rainBefore3pm": true
       },
       {
@@ -49,7 +42,7 @@
       {
         "date": "2026-02-04",
         "label": "Wed, Feb 4",
-        "rainMm": 0.4,
+        "rainMm": 0.1,
         "snowfallCm": 0,
         "rainBefore3pm": true
       },
@@ -63,19 +56,26 @@
       {
         "date": "2026-02-06",
         "label": "Fri, Feb 6",
-        "rainMm": 0,
+        "rainMm": 0.9,
         "snowfallCm": 0,
-        "rainBefore3pm": false
+        "rainBefore3pm": true
+      },
+      {
+        "date": "2026-02-07",
+        "label": "Sat, Feb 7",
+        "rainMm": 20.7,
+        "snowfallCm": 0,
+        "rainBefore3pm": true
       }
     ],
     "excludeBefore3pmRain": {
-      "2026-01-31": true,
       "2026-02-01": true,
       "2026-02-02": true,
       "2026-02-03": false,
       "2026-02-04": true,
       "2026-02-05": false,
-      "2026-02-06": false
+      "2026-02-06": true,
+      "2026-02-07": true
     },
     "raw": {
       "url": "https://api.open-meteo.com/v1/forecast?latitude=49.3889782663548&longitude=-123.20711795277704&timezone=America%2FVancouver&forecast_days=7&hourly=rain%2Csnowfall%2Ctemperature_2m"
