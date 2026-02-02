@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-02-01T23:28:45.899Z",
-  "generatedAtLocal": "2026-02-01, 15:28:45",
+  "generatedAt": "2026-02-02T14:25:01.472Z",
+  "generatedAtLocal": "2026-02-02, 06:25:01",
   "current": {
     "lifts": {
-      "open": 4,
+      "open": 0,
       "total": 6,
-      "closed": 2
+      "closed": 6
     },
     "snow": {
       "snowOvernightCm": 0,
@@ -19,25 +19,17 @@
   "forecast": {
     "days": [
       {
-        "date": "2026-02-01",
-        "label": "2026-02-01 (today)",
-        "rainMm": 15.2,
-        "snowfallCm": 0.9,
-        "rainBefore3pm": true,
-        "stoke": "bad"
-      },
-      {
         "date": "2026-02-02",
-        "label": "Mon, Feb 2",
-        "rainMm": 27.6,
-        "snowfallCm": 8.8,
+        "label": "2026-02-02 (today)",
+        "rainMm": 26.6,
+        "snowfallCm": 2.2,
         "rainBefore3pm": true,
         "stoke": "bad"
       },
       {
         "date": "2026-02-03",
         "label": "Tue, Feb 3",
-        "rainMm": 0.1,
+        "rainMm": 0.7,
         "snowfallCm": 0,
         "rainBefore3pm": true,
         "stoke": "bad"
@@ -45,7 +37,7 @@
       {
         "date": "2026-02-04",
         "label": "Wed, Feb 4",
-        "rainMm": 0.1,
+        "rainMm": 0,
         "snowfallCm": 0,
         "rainBefore3pm": true,
         "stoke": "bad"
@@ -69,7 +61,7 @@
       {
         "date": "2026-02-07",
         "label": "Sat, Feb 7",
-        "rainMm": 0,
+        "rainMm": 0.3,
         "snowfallCm": 0,
         "rainBefore3pm": false,
         "stoke": "good"
@@ -77,18 +69,18 @@
       {
         "date": "2026-02-08",
         "label": "Sun, Feb 8",
-        "rainMm": 0,
+        "rainMm": 14.7,
         "snowfallCm": 0,
-        "rainBefore3pm": false,
-        "stoke": "good"
+        "rainBefore3pm": true,
+        "stoke": "bad"
       },
       {
         "date": "2026-02-09",
         "label": "Mon, Feb 9",
-        "rainMm": 0.6,
+        "rainMm": 0,
         "snowfallCm": 0,
-        "rainBefore3pm": true,
-        "stoke": "bad"
+        "rainBefore3pm": false,
+        "stoke": "good"
       },
       {
         "date": "2026-02-10",
@@ -101,15 +93,15 @@
       {
         "date": "2026-02-11",
         "label": "Wed, Feb 11",
-        "rainMm": 0,
-        "snowfallCm": 0,
+        "rainMm": 6,
+        "snowfallCm": 1.9,
         "rainBefore3pm": false,
-        "stoke": "good"
+        "stoke": "meh"
       },
       {
         "date": "2026-02-12",
         "label": "Thu, Feb 12",
-        "rainMm": 0,
+        "rainMm": 0.4,
         "snowfallCm": 0,
         "rainBefore3pm": false,
         "stoke": "good"
@@ -117,35 +109,43 @@
       {
         "date": "2026-02-13",
         "label": "Fri, Feb 13",
-        "rainMm": 1.5,
-        "snowfallCm": 0.2,
-        "rainBefore3pm": false,
-        "stoke": "good"
+        "rainMm": 2.8,
+        "snowfallCm": 0.1,
+        "rainBefore3pm": true,
+        "stoke": "bad"
       },
       {
         "date": "2026-02-14",
         "label": "Sat, Feb 14",
-        "rainMm": 2.7,
-        "snowfallCm": 0.8,
+        "rainMm": 9.7,
+        "snowfallCm": 0.7,
         "rainBefore3pm": true,
         "stoke": "bad"
+      },
+      {
+        "date": "2026-02-15",
+        "label": "Sun, Feb 15",
+        "rainMm": 0,
+        "snowfallCm": 0,
+        "rainBefore3pm": false,
+        "stoke": "good"
       }
     ],
     "excludeBefore3pmRain": {
-      "2026-02-01": true,
       "2026-02-02": true,
       "2026-02-03": true,
       "2026-02-04": true,
       "2026-02-05": false,
       "2026-02-06": false,
       "2026-02-07": false,
-      "2026-02-08": false,
-      "2026-02-09": true,
+      "2026-02-08": true,
+      "2026-02-09": false,
       "2026-02-10": false,
       "2026-02-11": false,
       "2026-02-12": false,
-      "2026-02-13": false,
-      "2026-02-14": true
+      "2026-02-13": true,
+      "2026-02-14": true,
+      "2026-02-15": false
     },
     "raw": {
       "url": "https://api.open-meteo.com/v1/forecast?latitude=49.3889782663548&longitude=-123.20711795277704&timezone=America%2FVancouver&forecast_days=14&hourly=rain%2Csnowfall%2Ctemperature_2m"
@@ -162,7 +162,7 @@
     "label": "Next good day: Thu, Feb 5",
     "confidence": "meh",
     "reasons": [
-      "Cypress lift status: 4/6 open.",
+      "Cypress lift status: 0/6 open.",
       "Snow (7 days): 11 cm.",
       "Base depth: 120 cm.",
       "Excluded today: forecast shows rain before 3pm.",
